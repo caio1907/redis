@@ -1,6 +1,10 @@
-import Redis from 'async-redis';
+import Redis from 'redis';
+import AsyncRedis from 'async-redis';
 
-const client = Redis.createClient();
+const port:number = process.env.REDIS_URL ? Number(process.env.REDIS_URL) : 6379
+
+const redis = Redis.createClient(port);
+const client = AsyncRedis.decorate(redis);
 
 export const getCache = async (cityId: string) => {
   return await client.get(cityId ?? 'allcities');
